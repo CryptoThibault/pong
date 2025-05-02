@@ -5,18 +5,19 @@ export class Ball {
         public radius: number,
         public dx: number,
         public dy: number,
+        public speed: number,
         public color: string
       ) {}
 
     move(canvasWidth: number, canvasHeight: number): void {
-        this.x += this.dx;
-        this.y += this.dy;
+        this.x += this.dx * this.speed;
+        this.y += this.dy * this.speed;
         if (this.x + this.radius > canvasWidth || this.x - this.radius < 0) {
             this.dx = -this.dx;
-          }
-          if (this.y + this.radius > canvasHeight || this.y - this.radius < 0) {
-            this.dy = -this.dy;
-          }
+        }
+        if (this.y + this.radius > canvasHeight || this.y - this.radius < 0) {
+          this.dy = -this.dy;
+        }
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
