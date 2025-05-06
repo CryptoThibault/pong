@@ -8,19 +8,19 @@ export class Paddle {
         this.color = color;
     }
     moveUp(canvasHeight) {
-        if (this.y - this.speed >= 0) {
+        if (this.y - this.speed >= 5) {
             this.y -= this.speed;
         }
         else {
-            this.y = 0;
+            this.y = 5;
         }
     }
     moveDown(canvasHeight) {
-        if (this.y + this.height + this.speed <= canvasHeight) {
+        if (this.y + this.height + this.speed <= canvasHeight - 5) {
             this.y += this.speed;
         }
         else {
-            this.y = canvasHeight - this.height;
+            this.y = canvasHeight - this.height - 5;
         }
     }
     draw(ctx) {

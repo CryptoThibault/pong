@@ -3,16 +3,26 @@ import { Paddle } from "./paddle.js";
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 let isRunning = true;
-const ball = new Ball(250, 250, 15, 1, 2, 1, "white");
-const paddleWidth = 10;
-const paddleHeight = 100;
+let scores = { left: 0, right: 0 };
+const dxStart = Math.floor(Math.random() * 2) ? -1 : 1;
+const ball = new Ball(canvas.width / 2, canvas.height / 2, 5, dxStart, 0, 5, "white");
+const paddleWidth = canvas.width * 0.01;
+const paddleHeight = canvas.height * 0.15;
 const leftPaddle = new Paddle(5, canvas.height / 2 - paddleHeight / 2, paddleWidth, paddleHeight, 10, "white");
 const rightPaddle = new Paddle(canvas.width - paddleWidth - 5, canvas.height / 2 - paddleHeight / 2, paddleWidth, paddleHeight, 10, "white");
+function scoreGoal(player) {
+    player ? scores.right++ : scores.left++;
+    ball.dx = player ? -1 : 1;
+    ball.x = canvas.width / 2;
+    ball.y = canvas.height / 2;
+}
+export default scoreGoal;
 function updateGame() {
     ball.move(canvas.width, canvas.height);
     //ball.logPosition();
     //leftPaddle.logPosition();
     //rightPaddle.logPosition();
+    console.log(`Scores: left : ${scores.left} | right : ${scores.right}`);
 }
 function renderGame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -28,9 +38,8 @@ function renderPauseMenu() {
     ctx.fillStyle = "white";
     ctx.font = "30px Arial";
     ctx.textAlign = "center";
-    ctx.fillText("PAUSE", canvas.width / 2, canvas.height / 3);
-    ctx.fillText("Press ENTER to Resume", canvas.width / 2, canvas.height / 2);
-    ctx.fillText("Press X to Quit", canvas.width / 2, canvas.height / 1.5);
+    ctx.fillText("PAUSE", canvas.width / 2, canvas.height / 2);
+    ctx.fillText("Press P to Resume", canvas.width / 2, canvas.height / 1.5);
 }
 function gameLoop() {
     if (!isRunning)
@@ -50,23 +59,19 @@ function quitGame() {
     window.location.reload();
 }
 window.addEventListener("keydown", (event) => {
-    if (event.key === "Escape")
+    if (event.key === "p")
         togglePause();
+    if (event.key === "Escape")
+        quitGame();
     if (isRunning) {
-        if (event.key === "w")
-            leftPaddle.moveUp(canvas.height);
         if (event.key === "s")
-            leftPaddle.moveDown(canvas.height);
-        if (event.key === "o")
-            rightPaddle.moveUp(canvas.height);
-        if (event.key === "l")
-            rightPaddle.moveDown(canvas.height);
-    }
-    else {
-        if (event.key === "Enter")
-            togglePause();
+            leftPaddle.moveUp(canvas.height);
         if (event.key === "x")
-            quitGame();
+            leftPaddle.moveDown(canvas.height);
+        if (event.key === "ArrowUp")
+            rightPaddle.moveUp(canvas.height);
+        if (event.key === "ArrowDown")
+            rightPaddle.moveDown(canvas.height);
     }
 });
 gameLoop();

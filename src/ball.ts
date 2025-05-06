@@ -1,3 +1,5 @@
+import scoreGoal from "./game.js";
+
 export class Ball {
     constructor(
         public x: number,
@@ -12,8 +14,12 @@ export class Ball {
     move(canvasWidth: number, canvasHeight: number): void {
         this.x += this.dx * this.speed;
         this.y += this.dy * this.speed;
-        if (this.x + this.radius > canvasWidth || this.x - this.radius < 0) {
-            this.dx = -this.dx;
+        
+        if (this.x - this.radius < 0) {
+          scoreGoal(0);
+        }
+        if (this.x + this.radius > canvasWidth) {
+          scoreGoal(1);
         }
         if (this.y + this.radius > canvasHeight || this.y - this.radius < 0) {
           this.dy = -this.dy;
