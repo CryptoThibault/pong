@@ -28,7 +28,7 @@ function scoreGoal(player) {
     ball.dx = player ? 1 : -1;
     ball.dy = 0;
     ball.speed = MIN_SPEED;
-    if (scores.left === 10 || scores.right === 10)
+    if (scores.left === MAX_SCORE || scores.right === MAX_SCORE)
         quitGame();
 }
 export default scoreGoal;
@@ -64,7 +64,7 @@ function updateGame() {
         onPaddleHit(ball, rightPaddle);
 }
 function drawScores() {
-    ctx.font = "100px Tohama";
+    ctx.font = "100px 'Press Start 2P'";
     ctx.fillStyle = "white";
     ctx.fillText(`${scores.left}`, canvas.width / 2 - 100, 120);
     ctx.fillText(`${scores.right}`, canvas.width / 2 + 100, 120);
@@ -79,11 +79,11 @@ function drawCenterLine() {
     ctx.closePath();
 }
 function drawText() {
-    ctx.font = "40px Tahoma";
+    ctx.font = "40px 'Press Start 2P'";
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
     ctx.textBaseline = "bottom";
-    ctx.fillText("Pong".split('').join(' '.repeat(2)), canvas.width / 2, canvas.height - 10);
+    ctx.fillText("Pong".split('').join(' '.repeat(1)), canvas.width / 2, canvas.height - 10);
 }
 function renderGame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
