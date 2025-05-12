@@ -1,13 +1,14 @@
 import { Ball } from "./ball.js";
 import { Paddle } from "./paddle.js";
-const MIN_SPEED = 3;
-const MAX_SPEED = 10;
-const SPEED_INC = 1.05;
-const PADDLE_SPEED = 5;
-const MAX_SCORE = 10;
+const MIN_SPEED = 8;
+const MAX_SPEED = 15;
+const SPEED_INC = 1.1;
+const PADDLE_SPEED = 8;
+const MAX_SCORE = 5;
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 let isRunning = true;
+let isEnd = false;
 let keys = {
     "w": false,
     "s": false,
@@ -22,14 +23,14 @@ const paddleHeight = canvas.height * 0.15;
 const leftPaddle = new Paddle(5, canvas.height / 2 - paddleHeight / 2, paddleWidth, paddleHeight, PADDLE_SPEED, "white");
 const rightPaddle = new Paddle(canvas.width - paddleWidth - 5, canvas.height / 2 - paddleHeight / 2, paddleWidth, paddleHeight, PADDLE_SPEED, "white");
 function scoreGoal(player) {
-    player ? scores.right++ : scores.left++;
+    player ? scores.left++ : scores.right++;
     ball.x = canvas.width / 2;
     ball.y = canvas.height / 2;
     ball.dx = player ? 1 : -1;
     ball.dy = 0;
     ball.speed = MIN_SPEED;
     if (scores.left === MAX_SCORE || scores.right === MAX_SCORE)
-        quitGame();
+        isEnd = true;
 }
 export default scoreGoal;
 function hitPaddle(ball, paddle) {
@@ -100,24 +101,41 @@ function renderPauseMenu() {
     ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "white";
-    ctx.font = "30px Arial";
+    ctx.font = "20px 'Press Start 2P'";
     ctx.textAlign = "center";
-    ctx.fillText("PAUSE", canvas.width / 2, canvas.height / 3);
-    ctx.fillText("Press P to Resume", canvas.width / 2, canvas.height / 2);
-    ctx.fillText("Press ESC to Quit", canvas.width / 2, canvas.height / 1.5);
+    ctx.fillText("PAUSE", canvas.width / 2, canvas.height / 5);
+    ctx.fillText("Press P to Resume", canvas.width / 2, canvas.height / 5 * 2);
+    ctx.fillText("Press R to Restart", canvas.width / 2, canvas.height / 5 * 3);
+    ctx.fillText("Press ESC to Quit", canvas.width / 2, canvas.height / 5 * 4);
+}
+function renderEndMenu() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+    ctx.font = "20px 'Press Start 2P'";
+    ctx.textAlign = "center";
+    ctx.fillText("END", canvas.width / 2, canvas.height / 5);
+    ctx.fillText(`${scores.left === MAX_SCORE ? "Left" : "Right"} player win !`, canvas.width / 2, canvas.height / 5 * 2);
+    ctx.fillText("Press R to Restart", canvas.width / 2, canvas.height / 5 * 3);
+    ctx.fillText("Press ESC to Quit", canvas.width / 2, canvas.height / 5 * 4);
 }
 function togglePause() {
     isRunning = !isRunning;
     isRunning ? requestAnimationFrame(gameLoop) : renderPauseMenu();
 }
+function restartGame() {
+    window.location.reload();
+}
 function quitGame() {
     window.location.reload();
 }
 window.addEventListener("keydown", (event) => {
-    if (event.key === "p")
-        togglePause();
     if (event.key === "Escape")
         quitGame();
+    if (!isEnd && event.key === "p")
+        togglePause();
+    if (event.key === "r")
+        restartGame();
     if (isRunning) {
         if (event.key === "w")
             keys.w = true;
@@ -142,6 +160,10 @@ window.addEventListener('keyup', (event) => {
     }
 });
 function gameLoop() {
+    if (isEnd) {
+        isRunning = false;
+        renderEndMenu();
+    }
     if (!isRunning)
         return;
     updateGame();
