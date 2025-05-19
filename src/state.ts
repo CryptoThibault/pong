@@ -12,10 +12,10 @@ export let gameStates: { [key: string]: boolean } = {
 }
 
 export let keys: { [key: string]: boolean } = {
-    "w": false,
-    "s": false,
-    "Up": false,
-    "Down": false
+    w: false,
+    s: false,
+    Up: false,
+    Down: false
 };
 
 export let scores = {left: 0, right: 0};
