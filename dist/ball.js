@@ -1,4 +1,4 @@
-import scoreGoal from "./game.js";
+import { canvas, ctx, scoreGoal } from "./state.js";
 export class Ball {
     constructor(x, y, radius, dx, dy, speed, color) {
         this.x = x;
@@ -9,20 +9,20 @@ export class Ball {
         this.speed = speed;
         this.color = color;
     }
-    move(canvasWidth, canvasHeight) {
+    move() {
         this.x += this.dx * this.speed;
         this.y += this.dy * this.speed;
         if (this.x - this.radius < 0) {
             scoreGoal(0);
         }
-        if (this.x + this.radius > canvasWidth) {
+        if (this.x + this.radius > canvas.width) {
             scoreGoal(1);
         }
-        if (this.y + this.radius > canvasHeight || this.y - this.radius < 0) {
+        if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
             this.dy = -this.dy;
         }
     }
-    draw(ctx) {
+    draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fillStyle = this.color;

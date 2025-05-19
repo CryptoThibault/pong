@@ -1,3 +1,5 @@
+import { canvas, ctx } from "./state.js"
+
 export class Paddle {
     constructor(
       public x: number,
@@ -8,7 +10,7 @@ export class Paddle {
       public color: string
     ) {}
 
-    moveUp(canvasHeight: number): void {
+    moveUp(): void {
       if (this.y - this.speed >= 5) {
         this.y -= this.speed;
       } else {
@@ -16,21 +18,21 @@ export class Paddle {
       }
     }
   
-    moveDown(canvasHeight: number): void {
-      if (this.y + this.height + this.speed <= canvasHeight - 5) {
+    moveDown(): void {
+      if (this.y + this.height + this.speed <= canvas.height - 5) {
         this.y += this.speed;
       } else {
-        this.y = canvasHeight - this.height - 5;
+        this.y = canvas.height - this.height - 5;
       }
     }
   
-    draw(ctx: CanvasRenderingContext2D): void {
+    draw(): void {
       ctx.fillStyle = this.color;
       ctx.fillRect(this.x, this.y, this.width, this.height);
     }
   
     logPosition(): void {
-      console.log(`Position du paddle : x = ${this.x}, y = ${this.y}`);
+      console.log(`Paddle position : x = ${this.x}, y = ${this.y}`);
     }
   }
   
