@@ -1,15 +1,9 @@
 import { REACTION_TIME, IMPRECISION } from "./config.js";
-import { canvas, ball, keys, rightPaddle } from "./state.js";
+import { ball, keys, rightPaddle } from "./state.js";
 
 let lastUpdate = 0;
 
 export function updateAI() {
-  if (ball.x < canvas.width / 2) {
-    keys.Up = false;
-    keys.Down = false;
-    return;
-  }
-
   let currentTime = performance.now();
   if (currentTime - lastUpdate < REACTION_TIME) return;
   lastUpdate = currentTime;

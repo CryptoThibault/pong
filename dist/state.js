@@ -9,10 +9,10 @@ export let gameStates = {
     isEnd: false
 };
 export let keys = {
-    "w": false,
-    "s": false,
-    "Up": false,
-    "Down": false
+    w: false,
+    s: false,
+    Up: false,
+    Down: false
 };
 export let scores = { left: 0, right: 0 };
 const dxStart = Math.floor(Math.random() * 2) ? -1 : 1;
