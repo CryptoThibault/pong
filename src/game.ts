@@ -1,8 +1,9 @@
 import { MAX_SPEED, SPEED_INC, MAX_SCORE } from "./config.js";
-import { isEnd, isRunning, setIsRunning, keys, scores, ball, leftPaddle, rightPaddle } from "./state.js";
+import { gameStates, keys, scores, ball, leftPaddle, rightPaddle } from "./state.js";
 import { Ball } from "./ball.js";
 import { Paddle } from "./paddle.js";
 import { renderGame, renderPauseMenu, renderEndMenu } from "./render.js";
+import { updateAI } from "./ia.js";
 
 function hitPaddle(ball:Ball, paddle: Paddle): boolean {
     return (
@@ -27,19 +28,18 @@ function onPaddleHit(ball: Ball, paddle: Paddle): void {
 
 function updateGame() {
     ball.move();
+    if (gameStates.isSinglePlayer) updateAI();
     if (keys.w) leftPaddle.moveUp();
     if (keys.s) leftPaddle.moveDown();
     if (keys.Up) rightPaddle.moveUp();
     if (keys.Down) rightPaddle.moveDown();
-    if (hitPaddle(ball, leftPaddle))
-        onPaddleHit(ball, leftPaddle);
-    if (hitPaddle(ball, rightPaddle))
-        onPaddleHit(ball, rightPaddle);
+    if (hitPaddle(ball, leftPaddle)) onPaddleHit(ball, leftPaddle);
+    if (hitPaddle(ball, rightPaddle)) onPaddleHit(ball, rightPaddle);
 }
 
 function togglePause() {
-    setIsRunning(!isRunning);
-    isRunning ? requestAnimationFrame(gameLoop) : renderPauseMenu();
+    gameStates.isRunning = !gameStates.isRunning;
+    gameStates.isRunning ? requestAnimationFrame(gameLoop) : renderPauseMenu();
 }
 
 function restartGame() {
@@ -52,31 +52,31 @@ function quitGame() {
 
 window.addEventListener("keydown", (event) => {
     if (event.key === "Escape") quitGame();
-    if (!isEnd && event.key === "p") togglePause();
+    if (!gameStates.isEnd && event.key === "p") togglePause();
     if (event.key === "r") restartGame();
-    if (isRunning) {
+    if (gameStates.isRunning) {
         if (event.key === "w") keys.w = true;
         if (event.key === "s") keys.s = true;
-        if (event.key === "ArrowUp") keys.Up = true;
-        if (event.key === "ArrowDown") keys.Down = true;
+        if (!gameStates.isSinglePlayer && event.key === "ArrowUp") keys.Up = true;
+        if (!gameStates.isSinglePlayer && event.key === "ArrowDown") keys.Down = true;
     }
 });
 
 window.addEventListener('keyup', (event) => {
-    if (isRunning) {
+    if (gameStates.isRunning) {
         if (event.key === "w") keys.w = false;
         if (event.key === "s") keys.s = false;
-        if (event.key === "ArrowUp") keys.Up = false;
-        if (event.key === "ArrowDown") keys.Down = false;
+        if (!gameStates.isSinglePlayer && event.key === "ArrowUp") keys.Up = false;
+        if (!gameStates.isSinglePlayer && event.key === "ArrowDown") keys.Down = false;
     }
 });
 
 function gameLoop() {
-    if (isEnd) {
-        setIsRunning(false);
+    if (gameStates.isEnd) {
+        gameStates.isRunning = false;
         renderEndMenu(scores.left === MAX_SCORE);
     }
-    if (!isRunning) return;
+    if (!gameStates.isRunning) return;
     updateGame();
     renderGame();
     requestAnimationFrame(gameLoop);

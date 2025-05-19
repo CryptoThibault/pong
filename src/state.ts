@@ -5,10 +5,10 @@ import { Paddle } from "./paddle.js";
 export let canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
 export let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
-export let isEnd: boolean = false;
-export let isRunning: boolean = true;
-export function setIsRunning(value: boolean): void {
-  isRunning = value;
+export let gameStates: { [key: string]: boolean } = {
+  isSinglePlayer: true,
+  isRunning: true,
+  isEnd: false
 }
 
 export let keys: { [key: string]: boolean } = {
@@ -36,5 +36,5 @@ export function scoreGoal(player: number) {
     ball.dy = 0;
     ball.speed = MIN_SPEED;
     if (scores.left === MAX_SCORE || scores.right === MAX_SCORE)
-        isEnd = true;
+        gameStates.isEnd = true;
 }

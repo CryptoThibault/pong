@@ -3,11 +3,11 @@ import { Ball } from "./ball.js";
 import { Paddle } from "./paddle.js";
 export let canvas = document.getElementById("gameCanvas");
 export let ctx = canvas.getContext("2d");
-export let isEnd = false;
-export let isRunning = true;
-export function setIsRunning(value) {
-    isRunning = value;
-}
+export let gameStates = {
+    isSinglePlayer: true,
+    isRunning: true,
+    isEnd: false
+};
 export let keys = {
     "w": false,
     "s": false,
@@ -29,5 +29,5 @@ export function scoreGoal(player) {
     ball.dy = 0;
     ball.speed = MIN_SPEED;
     if (scores.left === MAX_SCORE || scores.right === MAX_SCORE)
-        isEnd = true;
+        gameStates.isEnd = true;
 }

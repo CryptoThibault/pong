@@ -1,6 +1,7 @@
 import { MAX_SPEED, SPEED_INC, MAX_SCORE } from "./config.js";
-import { isEnd, isRunning, setIsRunning, keys, scores, ball, leftPaddle, rightPaddle } from "./state.js";
+import { gameStates, keys, scores, ball, leftPaddle, rightPaddle } from "./state.js";
 import { renderGame, renderPauseMenu, renderEndMenu } from "./render.js";
+import { updateAI } from "./ia.js";
 function hitPaddle(ball, paddle) {
     return (ball.x - ball.radius < paddle.x + paddle.width &&
         ball.x + ball.radius > paddle.x &&
@@ -19,6 +20,8 @@ function onPaddleHit(ball, paddle) {
 }
 function updateGame() {
     ball.move();
+    if (gameStates.isSinglePlayer)
+        updateAI();
     if (keys.w)
         leftPaddle.moveUp();
     if (keys.s)
@@ -33,8 +36,8 @@ function updateGame() {
         onPaddleHit(ball, rightPaddle);
 }
 function togglePause() {
-    setIsRunning(!isRunning);
-    isRunning ? requestAnimationFrame(gameLoop) : renderPauseMenu();
+    gameStates.isRunning = !gameStates.isRunning;
+    gameStates.isRunning ? requestAnimationFrame(gameLoop) : renderPauseMenu();
 }
 function restartGame() {
     window.location.reload();
@@ -45,39 +48,39 @@ function quitGame() {
 window.addEventListener("keydown", (event) => {
     if (event.key === "Escape")
         quitGame();
-    if (!isEnd && event.key === "p")
+    if (!gameStates.isEnd && event.key === "p")
         togglePause();
     if (event.key === "r")
         restartGame();
-    if (isRunning) {
+    if (gameStates.isRunning) {
         if (event.key === "w")
             keys.w = true;
         if (event.key === "s")
             keys.s = true;
-        if (event.key === "ArrowUp")
+        if (!gameStates.isSinglePlayer && event.key === "ArrowUp")
             keys.Up = true;
-        if (event.key === "ArrowDown")
+        if (!gameStates.isSinglePlayer && event.key === "ArrowDown")
             keys.Down = true;
     }
 });
 window.addEventListener('keyup', (event) => {
-    if (isRunning) {
+    if (gameStates.isRunning) {
         if (event.key === "w")
             keys.w = false;
         if (event.key === "s")
             keys.s = false;
-        if (event.key === "ArrowUp")
+        if (!gameStates.isSinglePlayer && event.key === "ArrowUp")
             keys.Up = false;
-        if (event.key === "ArrowDown")
+        if (!gameStates.isSinglePlayer && event.key === "ArrowDown")
             keys.Down = false;
     }
 });
 function gameLoop() {
-    if (isEnd) {
-        setIsRunning(false);
+    if (gameStates.isEnd) {
+        gameStates.isRunning = false;
         renderEndMenu(scores.left === MAX_SCORE);
     }
-    if (!isRunning)
+    if (!gameStates.isRunning)
         return;
     updateGame();
     renderGame();
