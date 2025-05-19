@@ -1,21 +1,40 @@
-import { REACTION_TIME, IMPRECISION } from "./config.js";
-import { ball, keys, rightPaddle } from "./state.js";
+import { REACT_TIME, IMPRECISION, TRESHOLD } from "./config.js";
+import { canvas, ball, keys, rightPaddle } from "./state.js";
+
+function predictImpactY(): number {
+  let x = ball.x;
+  let y = ball.y;
+  let dx = ball.dx;
+  let dy = ball.dy;
+
+  while ((dx > 0 && x < rightPaddle.x) || (dx < 0 && x > rightPaddle.x)) {
+    x += dx * ball.speed;
+    y += dy * ball.speed;
+    if (y - ball.radius < 0 || y + ball.radius > canvas.height)
+      dy = -dy;
+  }
+
+  return y;
+}
 
 let lastUpdate = 0;
+let targetY = rightPaddle.y + rightPaddle.height / 2;
 
 export function updateAI() {
-  let currentTime = performance.now();
-  if (currentTime - lastUpdate < REACTION_TIME) return;
-  lastUpdate = currentTime;
+  const now = performance.now();
+  if (now - lastUpdate > REACT_TIME) {
+    lastUpdate = now;
+    targetY = ball.dx < 0 ? canvas.height / 2 : predictImpactY();
+    targetY += (Math.random() - 0.5) * IMPRECISION;
+  }
 
-  const targetY = ball.y + (Math.random() - 0.5) * IMPRECISION;
-
-  if (targetY < rightPaddle.y) {
-    keys.Up = true;
-    keys.Down = false;
-  } else if (targetY > rightPaddle.y + rightPaddle.height) {
+  const paddleCenter = rightPaddle.y + rightPaddle.height / 2;
+  if (paddleCenter < targetY - TRESHOLD) {
     keys.Up = false;
     keys.Down = true;
+  } else if (paddleCenter > targetY + TRESHOLD) {
+    keys.Up = true;
+    keys.Down = false;
   } else {
     keys.Up = false;
     keys.Down = false;

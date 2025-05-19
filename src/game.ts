@@ -35,6 +35,7 @@ function updateGame() {
     if (keys.Down) rightPaddle.moveDown();
     if (hitPaddle(ball, leftPaddle)) onPaddleHit(ball, leftPaddle);
     if (hitPaddle(ball, rightPaddle)) onPaddleHit(ball, rightPaddle);
+    console.log(ball.speed);
 }
 
 function togglePause() {

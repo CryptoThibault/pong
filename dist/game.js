@@ -34,6 +34,7 @@ function updateGame() {
         onPaddleHit(ball, leftPaddle);
     if (hitPaddle(ball, rightPaddle))
         onPaddleHit(ball, rightPaddle);
+    console.log(ball.speed);
 }
 function togglePause() {
     gameStates.isRunning = !gameStates.isRunning;
