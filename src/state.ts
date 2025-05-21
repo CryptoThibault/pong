@@ -7,6 +7,7 @@ export let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
 export let gameStates: { [key: string]: boolean } = {
   isSinglePlayer: true,
+  isRemote: false,
   isRunning: true,
   isEnd: false
 }
