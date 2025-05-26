@@ -1,9 +1,10 @@
-import { canvas, ctx, scores, ball, leftPaddle, rightPaddle } from "./state.js";
+import { MAX_SCORE } from "./config.js";
+import { canvas, ctx, match, ball, leftPaddle, rightPaddle } from "./state.js";
 function drawScores() {
     ctx.font = "100px 'Press Start 2P'";
     ctx.fillStyle = "white";
-    ctx.fillText(`${scores.left}`, canvas.width / 2 - 100, 120);
-    ctx.fillText(`${scores.right}`, canvas.width / 2 + 100, 120);
+    ctx.fillText(`${match.score[0]}`, canvas.width / 2 - 100, 120);
+    ctx.fillText(`${match.score[1]}`, canvas.width / 2 + 100, 120);
 }
 function drawCenterLine() {
     ctx.beginPath();
@@ -43,14 +44,14 @@ export function renderPauseMenu() {
     ctx.fillText("Press R to Restart", canvas.width / 2, canvas.height / 5 * 3);
     ctx.fillText("Press ESC to Quit", canvas.width / 2, canvas.height / 5 * 4);
 }
-export function renderEndMenu(side) {
+export function renderEndMenu() {
     ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "white";
     ctx.font = "20px 'Press Start 2P'";
     ctx.textAlign = "center";
     ctx.fillText("END", canvas.width / 2, canvas.height / 5);
-    ctx.fillText(`${side ? "Left" : "Right"} player win !`, canvas.width / 2, canvas.height / 5 * 2);
+    ctx.fillText(`${match.score[0] === MAX_SCORE ? "Left" : "Right"} player win !`, canvas.width / 2, canvas.height / 5 * 2);
     ctx.fillText("Press R to Restart", canvas.width / 2, canvas.height / 5 * 3);
     ctx.fillText("Press ESC to Quit", canvas.width / 2, canvas.height / 5 * 4);
 }

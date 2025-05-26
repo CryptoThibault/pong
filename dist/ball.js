@@ -12,15 +12,12 @@ export class Ball {
     move() {
         this.x += this.dx * this.speed;
         this.y += this.dy * this.speed;
-        if (this.x - this.radius < 0) {
-            scoreGoal(0);
-        }
-        if (this.x + this.radius > canvas.width) {
+        if (this.x - this.radius < 0)
             scoreGoal(1);
-        }
-        if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
+        if (this.x + this.radius > canvas.width)
+            scoreGoal(0);
+        if (this.y + this.radius > canvas.height || this.y - this.radius < 0)
             this.dy = -this.dy;
-        }
     }
     draw() {
         ctx.beginPath();

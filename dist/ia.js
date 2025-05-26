@@ -1,5 +1,5 @@
 import { REACT_TIME, IMPRECISION, TRESHOLD } from "./config.js";
-import { canvas, ball, keys, rightPaddle } from "./state.js";
+import { canvas, gameStates, ball, keys, rightPaddle } from "./state.js";
 function predictImpactY() {
     let x = ball.x;
     let y = ball.y;
@@ -16,9 +16,12 @@ function predictImpactY() {
 let lastUpdate = 0;
 let targetY = rightPaddle.y + rightPaddle.height / 2;
 export function updateAI() {
+    if (gameStates.isFirstUpdate)
+        lastUpdate = 0;
     const now = performance.now();
     if (now - lastUpdate > REACT_TIME) {
         lastUpdate = now;
+        gameStates.isFirstUpdate = false;
         targetY = ball.dx < 0 ? canvas.height / 2 : predictImpactY();
         targetY += (Math.random() - 0.5) * IMPRECISION;
     }

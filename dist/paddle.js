@@ -1,3 +1,4 @@
+import { BORDER } from "./config.js";
 import { canvas, ctx } from "./state.js";
 export class Paddle {
     constructor(x, y, width, height, speed, color) {
@@ -9,19 +10,19 @@ export class Paddle {
         this.color = color;
     }
     moveUp() {
-        if (this.y - this.speed >= 5) {
+        if (this.y - this.speed >= BORDER) {
             this.y -= this.speed;
         }
         else {
-            this.y = 5;
+            this.y = BORDER;
         }
     }
     moveDown() {
-        if (this.y + this.height + this.speed <= canvas.height - 5) {
+        if (this.y + this.height + this.speed <= canvas.height - BORDER) {
             this.y += this.speed;
         }
         else {
-            this.y = canvas.height - this.height - 5;
+            this.y = canvas.height - this.height - BORDER;
         }
     }
     draw() {
