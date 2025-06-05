@@ -10,9 +10,9 @@ export class Tournament {
       throw new Error("Tournament requires exactly 4 players.");
     }
 
-    this.matches.push(new Match(players[0], players[1]));
-    this.matches.push(new Match(players[2], players[3]));
-    this.matches.push(new Match("", ""));
+    this.matches.push(new Match(false, players[0], players[1]));
+    this.matches.push(new Match(false, players[2], players[3]));
+    this.matches.push(new Match(false, "", ""));
   }
 
   getCurrentMatch(): Match | null {
@@ -26,7 +26,7 @@ export class Tournament {
     const match = this.getCurrentMatch();
     if (!match) return;
 
-    match.setWinner();
+    //match.setWinner();
 
     if (this.currentMatchIndex === 0) {
       this.matches[2].player1 = winner;
