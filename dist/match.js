@@ -17,7 +17,7 @@ export class Match {
         this.player2 = player2;
         this.winner = null;
         this.score = [0, 0];
-        this.played = false;
+        this.isEnd = false;
     }
     start() {
         setMatch(this);
@@ -27,7 +27,7 @@ export class Match {
     restart() {
         this.winner = null;
         this.score = [0, 0];
-        this.played = false;
+        this.isEnd = false;
         gameStates.isEnd = false;
         if (!gameStates.isRunning) {
             gameStates.isRunning = true;
@@ -38,9 +38,11 @@ export class Match {
             initGame();
     }
     end() {
-        this.played = true;
+        this.isEnd = true;
         this.winner = this.score[0] === MAX_SCORE ? this.player1 : this.player2;
-        console.log(`DB player ${this.winner} win, score ${this.score}`);
+        if (this.onEnd)
+            this.onEnd();
+        console.log(`Send to DB: player ${this.winner} win, score ${this.score}`);
         //this.sendResult();
     }
     updateScore(playerIndex) {

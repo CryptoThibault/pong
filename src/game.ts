@@ -35,8 +35,8 @@ window.addEventListener("keyup", (event) => {
 export function gameLoop() {
     if (gameStates.isEnd) {
         gameStates.isRunning = false;
-        getMatch()?.end();
         renderEndMenu();
+        getMatch()?.end();
     }
     if (!gameStates.isRunning) return;
     updateGame();
@@ -45,6 +45,7 @@ export function gameLoop() {
 }
 
 export function initGame() {
+    gameStates.isEnd = false;
     ball.init();
     leftPaddle.init(true);
     rightPaddle.init(false);

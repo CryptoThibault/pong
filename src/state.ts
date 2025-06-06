@@ -21,7 +21,7 @@ export function getMatch(): Match | null {
 export let gameStates: { [key: string]: boolean } = {
     isFirstUpdate: true,
     isRunning: true,
-    isEnd: false
+    isEnd: true
 }
 
 export let keys: { [key: string]: boolean } = {

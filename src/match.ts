@@ -5,7 +5,9 @@ import { gameLoop, initGame } from "./game.js";
 export class Match {
     winner: string | null = null;
     score: number[] = [0, 0];
-    played: boolean = false;
+    isEnd: boolean = false;
+
+    onEnd?: () => void;
 
     constructor(
         public isSinglePlayer: boolean,
@@ -22,7 +24,7 @@ export class Match {
     restart() {
         this.winner = null;
         this.score = [0, 0];
-        this.played = false;
+        this.isEnd = false;
         gameStates.isEnd = false;
         if (!gameStates.isRunning) {
             gameStates.isRunning = true;
@@ -32,10 +34,12 @@ export class Match {
     }
 
     end() {
-        this.played = true;
+        this.isEnd = true;
         this.winner = this.score[0] === MAX_SCORE ? this.player1 : this.player2;
 
-        console.log(`DB player ${this.winner} win, score ${this.score}`);
+        if (this.onEnd) this.onEnd();
+
+        console.log(`Send to DB: player ${this.winner} win, score ${this.score}`);
         //this.sendResult();
     }
 

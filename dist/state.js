@@ -15,7 +15,7 @@ export function getMatch() {
 export let gameStates = {
     isFirstUpdate: true,
     isRunning: true,
-    isEnd: false
+    isEnd: true
 };
 export let keys = {
     w: false,

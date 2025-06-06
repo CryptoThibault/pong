@@ -27,7 +27,7 @@ export function updateAI() {
         lastUpdate = now;
         gameStates.isFirstUpdate = false;
         targetY = ball.dx < 0 ? canvas.height / 2 : predictImpactY();
-        targetY += (Math.random() - 0.5) * IMPRECISION;
+        targetY += (Math.random() - 0.5) * ball.speed * IMPRECISION;
     }
 
     const paddleCenter = rightPaddle.y + rightPaddle.height / 2;

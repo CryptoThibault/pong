@@ -44,8 +44,8 @@ export function gameLoop() {
     var _a;
     if (gameStates.isEnd) {
         gameStates.isRunning = false;
-        (_a = getMatch()) === null || _a === void 0 ? void 0 : _a.end();
         renderEndMenu();
+        (_a = getMatch()) === null || _a === void 0 ? void 0 : _a.end();
     }
     if (!gameStates.isRunning)
         return;
@@ -54,6 +54,7 @@ export function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 export function initGame() {
+    gameStates.isEnd = false;
     ball.init();
     leftPaddle.init(true);
     rightPaddle.init(false);
