@@ -1,4 +1,5 @@
 import { Match } from "./match.js"
+import { gameStates } from "./state.js";
 import { renderRanking } from "./render.js";
 
 export class Tournament {
@@ -18,14 +19,13 @@ export class Tournament {
             this.matches.push(new Match(2, this.players[this.getLooserIndex(0)], this.players[this.getLooserIndex(1)]));
             this.matches.push(new Match(2, this.players[this.getWinnerIndex(0)], this.players[this.getWinnerIndex(1)]));
         } else if (this.currentMatchIndex === 4) {
-            
-                renderRanking(this.getRanking());
-            
+            renderRanking(this.getRanking());
             return;
         }
 
         const currentMatch = this.matches[this.currentMatchIndex];
         currentMatch.onEnd = () => {
+            gameStates.isIntro = true;
             this.currentMatchIndex++;
             setTimeout(() => {
                 this.startNextMatch();
