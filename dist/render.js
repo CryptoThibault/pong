@@ -1,11 +1,10 @@
 import { BACKGROUND_COLOR, ITEMS_COLOR, MAX_SCORE } from "./config.js";
-import { canvas, ctx, getMatch, ball, leftPaddle, rightPaddle } from "./state.js";
+import { canvas, ctx, match, ball, leftPaddle, rightPaddle } from "./state.js";
 function drawScores() {
-    var _a, _b;
     ctx.font = "100px 'Press Start 2P'";
     ctx.fillStyle = ITEMS_COLOR;
-    ctx.fillText(`${(_a = getMatch()) === null || _a === void 0 ? void 0 : _a.score[0]}`, canvas.width / 2 - 100, 120);
-    ctx.fillText(`${(_b = getMatch()) === null || _b === void 0 ? void 0 : _b.score[1]}`, canvas.width / 2 + 100, 120);
+    ctx.fillText(`${match === null || match === void 0 ? void 0 : match.score[0]}`, canvas.width / 2 - 100, 120);
+    ctx.fillText(`${match === null || match === void 0 ? void 0 : match.score[1]}`, canvas.width / 2 + 100, 120);
 }
 function drawCenterLine() {
     ctx.beginPath();
@@ -47,7 +46,6 @@ export function renderPauseMenu() {
     ctx.fillText("Press ESC to Quit", canvas.width / 2, canvas.height / 5 * 4);
 }
 export function renderEndMenu() {
-    var _a, _b, _c;
     ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = ITEMS_COLOR;
@@ -55,19 +53,32 @@ export function renderEndMenu() {
     ctx.textAlign = "center";
     ctx.fillText("END", canvas.width / 2, canvas.height / 5);
     ctx.font = "16px 'Press Start 2P'";
-    ctx.fillText(`Congratulation ${((_a = getMatch()) === null || _a === void 0 ? void 0 : _a.score[0]) === MAX_SCORE ? (_b = getMatch()) === null || _b === void 0 ? void 0 : _b.player1 : (_c = getMatch()) === null || _c === void 0 ? void 0 : _c.player2}, you win!`, canvas.width / 2, canvas.height / 5 * 2);
+    ctx.fillText(`Congratulations ${(match === null || match === void 0 ? void 0 : match.score[0]) === MAX_SCORE ? match === null || match === void 0 ? void 0 : match.player1 : match === null || match === void 0 ? void 0 : match.player2}, you win!`, canvas.width / 2, canvas.height / 5 * 2);
     ctx.fillText("Press R to Restart", canvas.width / 2, canvas.height / 5 * 3);
     ctx.fillText("Press ESC to Quit", canvas.width / 2, canvas.height / 5 * 4);
 }
-export function renderMatchIntro(match) {
+export function renderMatchIntro() {
     ctx.fillStyle = BACKGROUND_COLOR;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = ITEMS_COLOR;
     ctx.font = "24px 'Press Start 2P'";
     ctx.textAlign = "center";
     ctx.fillText("Next Match", canvas.width / 2, canvas.height / 5);
-    ctx.fillText(`${match.player1} vs ${match.player2}`, canvas.width / 2, canvas.height / 5 * 2);
+    ctx.fillText(`${match === null || match === void 0 ? void 0 : match.player1} vs ${match === null || match === void 0 ? void 0 : match.player2}`, canvas.width / 2, canvas.height / 5 * 2);
     ctx.font = "16px 'Press Start 2P'";
-    //ADD last match score if exist
     ctx.fillText("Press ENTER to start", canvas.width / 2, canvas.height / 5 * 3.5);
+}
+export function renderRanking(ranking) {
+    ctx.fillStyle = BACKGROUND_COLOR;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = ITEMS_COLOR;
+    ctx.font = "24px 'Press Start 2P'";
+    ctx.textAlign = "center";
+    ctx.fillText("RANKING", canvas.width / 2, canvas.height / 5);
+    ctx.font = "16px 'Press Start 2P'";
+    ctx.fillText(`${ranking[0]} win the tournament, congratulations!`, canvas.width / 2, canvas.height / 8 * 3);
+    ctx.fillText(`1) ${ranking[0]}`, canvas.width / 2, canvas.height / 8 * 4);
+    ctx.fillText(`2) ${ranking[1]}`, canvas.width / 2, canvas.height / 8 * 5);
+    ctx.fillText(`3) ${ranking[2]}`, canvas.width / 2, canvas.height / 8 * 6);
+    ctx.fillText(`4) ${ranking[3]}`, canvas.width / 2, canvas.height / 8 * 7);
 }

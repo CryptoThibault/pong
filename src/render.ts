@@ -1,12 +1,11 @@
 import { BACKGROUND_COLOR, ITEMS_COLOR, MAX_SCORE } from "./config.js";
-import { Match } from "./match.js";
-import { canvas, ctx, getMatch, ball, leftPaddle, rightPaddle } from "./state.js";
+import { canvas, ctx, match, ball, leftPaddle, rightPaddle } from "./state.js";
 
 function drawScores() {
     ctx.font = "100px 'Press Start 2P'";
     ctx.fillStyle = ITEMS_COLOR;
-    ctx.fillText(`${getMatch()?.score[0]}`, canvas.width / 2 - 100, 120);
-    ctx.fillText(`${getMatch()?.score[1]}`, canvas.width / 2 + 100, 120);
+    ctx.fillText(`${match?.score[0]}`, canvas.width / 2 - 100, 120);
+    ctx.fillText(`${match?.score[1]}`, canvas.width / 2 + 100, 120);
 }
 
 function drawCenterLine() {
@@ -60,20 +59,34 @@ export function renderEndMenu() {
     ctx.textAlign = "center";
     ctx.fillText("END", canvas.width / 2, canvas.height / 5);
     ctx.font = "16px 'Press Start 2P'";
-    ctx.fillText(`Congratulation ${getMatch()?.score[0] === MAX_SCORE ? getMatch()?.player1 : getMatch()?.player2}, you win!`, canvas.width / 2, canvas.height / 5 * 2);
+    ctx.fillText(`Congratulations ${match?.score[0] === MAX_SCORE ? match?.player1 : match?.player2}, you win!`, canvas.width / 2, canvas.height / 5 * 2);
     ctx.fillText("Press R to Restart", canvas.width / 2, canvas.height / 5 * 3);
     ctx.fillText("Press ESC to Quit", canvas.width / 2, canvas.height / 5 * 4);
 }
 
-export function renderMatchIntro(match: Match) {
+export function renderMatchIntro() {
     ctx.fillStyle = BACKGROUND_COLOR;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = ITEMS_COLOR;
     ctx.font = "24px 'Press Start 2P'";
     ctx.textAlign = "center";
     ctx.fillText("Next Match", canvas.width / 2, canvas.height / 5);
-    ctx.fillText(`${match.player1} vs ${match.player2}`, canvas.width / 2, canvas.height / 5 * 2);
+    ctx.fillText(`${match?.player1} vs ${match?.player2}`, canvas.width / 2, canvas.height / 5 * 2);
     ctx.font = "16px 'Press Start 2P'";
-    //ADD last match score if exist
     ctx.fillText("Press ENTER to start", canvas.width / 2, canvas.height / 5 * 3.5);
+}
+
+export function renderRanking(ranking: string[]) {
+    ctx.fillStyle = BACKGROUND_COLOR;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = ITEMS_COLOR;
+    ctx.font = "24px 'Press Start 2P'";
+    ctx.textAlign = "center";
+    ctx.fillText("RANKING", canvas.width / 2, canvas.height / 5);
+    ctx.font = "16px 'Press Start 2P'";
+    ctx.fillText(`${ranking[0]} win the tournament, congratulations!`, canvas.width / 2, canvas.height / 8 * 3);
+    ctx.fillText(`1) ${ranking[0]}`, canvas.width / 2, canvas.height / 8 * 4);
+    ctx.fillText(`2) ${ranking[1]}`, canvas.width / 2, canvas.height / 8 * 5);
+    ctx.fillText(`3) ${ranking[2]}`, canvas.width / 2, canvas.height / 8 * 6);
+    ctx.fillText(`4) ${ranking[3]}`, canvas.width / 2, canvas.height / 8 * 7);
 }

@@ -8,47 +8,59 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { MAX_SCORE } from "./config.js";
-import { setMatch, gameStates } from "./state.js";
+import { setMatch, gameStates, animationId, setAnimationId } from "./state.js";
 import { gameLoop, initGame } from "./game.js";
+import { renderEndMenu, renderMatchIntro, renderPauseMenu } from "./render.js";
 export class Match {
-    constructor(isSinglePlayer, player1, player2) {
-        this.isSinglePlayer = isSinglePlayer;
+    constructor(gameMode, player1, player2) {
+        this.gameMode = gameMode;
         this.player1 = player1;
         this.player2 = player2;
         this.winner = null;
         this.score = [0, 0];
-        this.isEnd = false;
     }
     start() {
         setMatch(this);
         initGame();
-        gameLoop();
+        gameStates.isIntro ? renderMatchIntro() : setAnimationId(requestAnimationFrame(gameLoop));
     }
     restart() {
+        this.stop();
         this.winner = null;
         this.score = [0, 0];
-        this.isEnd = false;
-        gameStates.isEnd = false;
-        if (!gameStates.isRunning) {
-            gameStates.isRunning = true;
-            initGame();
-            gameLoop();
+        this.start();
+    }
+    pause() {
+        gameStates.isRunning = !gameStates.isRunning;
+        if (gameStates.isRunning)
+            setAnimationId(requestAnimationFrame(gameLoop));
+        else {
+            this.stop();
+            renderPauseMenu();
         }
-        else
-            initGame();
     }
     end() {
-        this.isEnd = true;
+        gameStates.isRunning = false;
+        gameStates.isEnd = true;
         this.winner = this.score[0] === MAX_SCORE ? this.player1 : this.player2;
-        if (this.onEnd)
-            this.onEnd();
+        this.stop();
+        if (this.gameMode !== 2)
+            renderEndMenu();
         console.log(`Send to DB: player ${this.winner} win, score ${this.score}`);
         //this.sendResult();
+        if (this.onEnd)
+            this.onEnd();
+    }
+    stop() {
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            setAnimationId(null);
+        }
     }
     updateScore(playerIndex) {
         this.score[playerIndex]++;
         if (this.score[playerIndex] === MAX_SCORE)
-            gameStates.isEnd = true;
+            this.end();
     }
     sendResult() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -60,7 +72,7 @@ export class Match {
                         player1: this.player1,
                         player2: this.player2,
                         score: this.score,
-                        winner: this.winner,
+                        winner: this.winner
                     }),
                 });
                 if (!response.ok)

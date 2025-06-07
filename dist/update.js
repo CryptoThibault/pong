@@ -1,5 +1,5 @@
 import { MAX_SPEED, MIN_SPEED, SPEED_INC } from "./config.js";
-import { canvas, getMatch, gameStates, keys, ball, leftPaddle, rightPaddle } from "./state.js";
+import { canvas, match, gameStates, keys, ball, leftPaddle, rightPaddle } from "./state.js";
 import { updateAI } from "./ia.js";
 function hitPaddle(ball, paddle) {
     return (ball.x - ball.radius < paddle.x + paddle.width &&
@@ -18,9 +18,8 @@ function onPaddleHit(ball, paddle) {
     ball.x += ball.dx * ball.radius;
 }
 export function updateGame() {
-    var _a;
     ball.move();
-    if ((_a = getMatch()) === null || _a === void 0 ? void 0 : _a.isSinglePlayer)
+    if (!(match === null || match === void 0 ? void 0 : match.gameMode))
         updateAI();
     if (keys.w)
         leftPaddle.moveUp();
@@ -36,9 +35,8 @@ export function updateGame() {
         onPaddleHit(ball, rightPaddle);
 }
 export function scoreGoal(playerIndex) {
-    var _a, _b;
-    (_a = getMatch()) === null || _a === void 0 ? void 0 : _a.updateScore(playerIndex);
-    if ((_b = getMatch()) === null || _b === void 0 ? void 0 : _b.isSinglePlayer)
+    match === null || match === void 0 ? void 0 : match.updateScore(playerIndex);
+    if (!(match === null || match === void 0 ? void 0 : match.gameMode))
         gameStates.isFirstUpdate = true;
     ball.x = canvas.width / 2;
     ball.y = canvas.height / 2;

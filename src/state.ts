@@ -8,20 +8,21 @@ canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
 export let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
-let currentMatch: Match | null = null;
-
-export function setMatch(match: Match) {
-    currentMatch = match; 
+export let match: Match | null = null;
+export function setMatch(currentMatch: Match) {
+    match = currentMatch; 
 }
 
-export function getMatch(): Match | null {
-    return currentMatch;
+export let animationId: number | null = null;
+export function setAnimationId(id: number | null) {
+    animationId = id; 
 }
 
 export let gameStates: { [key: string]: boolean } = {
-    isFirstUpdate: true,
-    isRunning: true,
-    isEnd: true
+    isIntro: false,
+    isRunning: false,
+    isEnd: false,
+    isFirstUpdate: true
 }
 
 export let keys: { [key: string]: boolean } = {

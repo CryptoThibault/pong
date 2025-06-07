@@ -1,5 +1,5 @@
 import { Match } from "./match.js"
-import { renderMatchIntro } from "./render.js";
+import { renderRanking } from "./render.js";
 
 export class Tournament {
     matches: Match[] = [];
@@ -9,48 +9,38 @@ export class Tournament {
         if (players.length !== 4)
             throw new Error("Tournament requires exactly 4 players.");
 
-        this.matches.push(new Match(false, players[0], players[1]));
-        this.matches.push(new Match(false, players[2], players[3]));
+        this.matches.push(new Match(2, players[0], players[1]));
+        this.matches.push(new Match(2, players[2], players[3]));
     }
 
     startNextMatch() {
         if (this.currentMatchIndex === 2) {
-            this.matches.push(new Match(false, this.players[this.getLooserIndex(0)], this.players[this.getLooserIndex(1)]));
-            this.matches.push(new Match(false, this.players[this.getWinnerIndex(0)], this.players[this.getWinnerIndex(1)]));
+            this.matches.push(new Match(2, this.players[this.getLooserIndex(0)], this.players[this.getLooserIndex(1)]));
+            this.matches.push(new Match(2, this.players[this.getWinnerIndex(0)], this.players[this.getWinnerIndex(1)]));
         } else if (this.currentMatchIndex === 4) {
-            this.renderRanking();
+            
+                renderRanking(this.getRanking());
+            
             return;
         }
 
         const currentMatch = this.matches[this.currentMatchIndex];
         currentMatch.onEnd = () => {
             this.currentMatchIndex++;
-            this.startNextMatch();
+            setTimeout(() => {
+                this.startNextMatch();
+            }, 50);
         }
-        this.matchIntro();
+        currentMatch.start();
     }
 
-    matchIntro() {
-        const currentMatch = this.matches[this.currentMatchIndex];
-        renderMatchIntro(currentMatch);
-        const handleKey = (e: KeyboardEvent) => {
-            if (e.key === "Enter") {
-                document.removeEventListener("keydown", handleKey);
-                currentMatch.start();
-            }
-        };
-
-        document.addEventListener("keydown", handleKey);
-    }
-
-    renderRanking() {
+    getRanking(): string[] {
         const ranking: string[] = [];
         ranking.push(this.matches[3].winner!);
         ranking.push(this.getLooser(3));
         ranking.push(this.matches[2].winner!);
         ranking.push(this.getLooser(2));
-        this.players = ranking;
-        console.log("Ranking: " + this.players);
+        return ranking;
     }
 
     getWinnerIndex(matchIndex: number): number {
