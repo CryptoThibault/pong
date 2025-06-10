@@ -45,9 +45,12 @@ export class Match {
         this.winner = this.score[0] === MAX_SCORE ? this.player1 : this.player2;
         this.stop();
         if (this.gameMode !== 2)
-            renderEndMenu();
+            setTimeout(() => {
+                renderEndMenu();
+            }, 50);
         console.log(`Send to DB: player ${this.winner} win, score ${this.score}`);
-        //this.sendResult();
+        //if (isLogin)
+        //    this.sendResult();
         if (this.onEnd)
             this.onEnd();
     }
@@ -69,6 +72,7 @@ export class Match {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
+                        gameMode: this.gameMode,
                         player1: this.player1,
                         player2: this.player2,
                         score: this.score,

@@ -15,7 +15,7 @@ export function setMatch(currentMatch: Match) {
 
 export let animationId: number | null = null;
 export function setAnimationId(id: number | null) {
-    animationId = id; 
+    animationId = id;
 }
 
 export let gameStates: { [key: string]: boolean } = {
