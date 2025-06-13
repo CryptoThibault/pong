@@ -18,7 +18,7 @@ export class Match {
     start() {
         setMatch(this);
         initGame();
-        gameStates.isIntro ? renderMatchIntro() : setAnimationId(requestAnimationFrame(gameLoop));
+        renderMatchIntro();
     }
 
     restart() {

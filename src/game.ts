@@ -43,7 +43,7 @@ export function gameLoop() {
 
 export function initGame() {
     initCanvas();
-    if (match?.gameMode === 2) gameStates.isIntro = true;
+    gameStates.isIntro = true;
     gameStates.isRunning = true;
     gameStates.isEnd = false;
     gameStates.isFirstUpdate = true;
