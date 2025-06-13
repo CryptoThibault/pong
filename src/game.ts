@@ -47,6 +47,10 @@ export function initGame() {
     gameStates.isRunning = true;
     gameStates.isEnd = false;
     gameStates.isFirstUpdate = true;
+    keys.w = false;
+    keys.s = false;
+    keys.Up = false;
+    keys.Down = false;
     ball.init();
     leftPaddle.init(true);
     rightPaddle.init(false);
