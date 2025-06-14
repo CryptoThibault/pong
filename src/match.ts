@@ -16,13 +16,13 @@ export class Match {
     ) {}
 
     start() {
+        this.stop();
         setMatch(this);
         initGame();
         renderMatchIntro();
     }
 
     restart() {
-        this.stop();
         this.winner = null;
         this.score = [0, 0];
         this.start();
